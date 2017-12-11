@@ -17,7 +17,7 @@
 </template>
 <script>
   import myHeader from '../components/header.vue'
-  import myFooter from '../components/footer.vue'
+  import myFooter from '../components/menu.vue'
   export default {
     components: { myHeader, myFooter },
     data () {
@@ -27,13 +27,12 @@
       }
     },
     created () {
-      this.getData()
+      this.getDatagg()
     },
     methods: {
-      getData () {
+      getDatagg () {
         this.api.get('topic/' + this.id, null, r => {
           this.dat = r.data;
-          console.log(this.dat)
         })
       }
     }

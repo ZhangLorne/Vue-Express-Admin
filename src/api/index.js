@@ -1,4 +1,4 @@
-let root='/api/v1'
+let root='/api'
 let axios=require('axios')
 
 function toType(o) {
@@ -34,7 +34,7 @@ function apiAxios (method, url, params, success, failure) {
     withCredentials: false
   })
     .then(function (res) {
-      if (res.data.success === true) {
+      if (res.status === 200) {
         if (success) {
           success(res.data)
         }
@@ -42,7 +42,6 @@ function apiAxios (method, url, params, success, failure) {
         if (failure) {
           failure(res.data)
         } else {
-          window.alert('error: ' + JSON.stringify(res.data))
         }
       }
     })

@@ -11,8 +11,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api/v1/**': {
-        target: 'https://cnodejs.org', // 你接口的域名
+      '/api/**': {
+        target: 'http://localhost:3000/', // 你接口的域名
         secure: false,
         changeOrigin: false,
       }
