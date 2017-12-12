@@ -1,30 +1,6 @@
 let root='/api'
 let axios=require('axios')
-
-function toType(o) {
-  return ({}).toString().call(o).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-}
-
-function filterNull (o) {
-  for (var key in o) {
-    if (o[key] === null) {
-      delete o[key]
-    }
-    if (toType(o[key]) === 'string') {
-      o[key] = o[key].trim()
-    } else if (toType(o[key]) === 'object') {
-      o[key] = filterNull(o[key])
-    } else if (toType(o[key]) === 'array') {
-      o[key] = filterNull(o[key])
-    }
-  }
-  return o
-}
-
 function apiAxios (method, url, params, success, failure) {
-  if (params) {
-    params = filterNull(params)
-  }
   axios({
     method: method,
     url: url,
@@ -45,12 +21,12 @@ function apiAxios (method, url, params, success, failure) {
         }
       }
     })
-    .catch(function (err) {
-      let res = err.response
-      if (err) {
-        window.alert('api error, HTTP code: ' + res.status)
-      }
-    })
+    // .catch(function (err) {
+    //   let res = err.response
+    //   if (err) {
+    //     window.alert('api error, HTTP code: ' + res.status)
+    //   }
+    // })
 }
 // 返回在vue模板中的调用接口
 export default {
