@@ -28,18 +28,32 @@ function apiAxios (method, url, params, success, failure) {
     //   }
     // })
 }
-// 返回在vue模板中的调用接口
+var port='http://localhost:3000';
 export default {
-  get: function (url, params, success, failure) {
+  //请求方式
+  get: (url, params, success, failure)=> {
     return apiAxios('GET', url, params, success, failure)
   },
-  post: function (url, params, success, failure) {
+  post: (url, params, success, failure)=>{
     return apiAxios('POST', url, params, success, failure)
   },
-  put: function (url, params, success, failure) {
+  put: (url, params, success, failure)=>{
     return apiAxios('PUT', url, params, success, failure)
   },
-  delete: function (url, params, success, failure) {
+  delete:(url, params, success, failure)=>{
     return apiAxios('DELETE', url, params, success, failure)
+  },
+  //具体请求
+  findUser:function (params,success) {
+    this.post(port+'/user/find',params,success)
+  },
+  saveUser:function (params,success) {
+    this.post(port+'/user/save',params,success)
+  },
+  removeUser:function (params,success) {
+    this.post(port+'/user/remove',params,success)
+  },
+  login:function (params,success) {
+    this.post(port+'/user/login',params,success)
   }
 }

@@ -14,7 +14,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="removeUser(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,7 +44,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary"  @click="submitForm('form')">确 定</el-button>
+          <el-button type="primary"  @click="addUser('form')">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -69,27 +69,29 @@
       }
     },
     created(){
-      this.findData();
+      this.findUser();
     },
     methods:{
-      findData(){
-        var that=this;
-        this.api.post('http://localhost:3000/user/find',{},function (d) {
-            that.tableData=d;
+      findUser(){
+        this.api.findUser({},(d)=>{
+          this.tableData=d;
         })
       },
-      submitForm(formName) {
+      addUser(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.api.post('http://localhost:3000/user/save',{name:'test',data:'2017-05-03',address:'广州市天河区'})
-            this.findData();
+            this.api.saveUser({date:this.form.date,name:this.form.name,address:this.form.address})
+            this.findUser();
             this.dialogFormVisible = false;
           } else {
-            console.log('error submit!!');
             return false;
           }
         });
       },
+      removeUser(index,row){
+        this.api.removeUser({id:row._id})
+        this.findUser();
+      }
     }
   }
 </script>
