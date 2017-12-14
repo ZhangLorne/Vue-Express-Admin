@@ -50,6 +50,9 @@
                         type: 'success',
                         message: '登录成功'
                       });
+                      setTimeout(()=> {
+                        this.$router.push({ path: 'home' })
+                      },500)
                     }
                   })
                 } else {

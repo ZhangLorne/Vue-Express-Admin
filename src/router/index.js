@@ -4,6 +4,7 @@ import Index from '@/page/index'
 import UserList from '@/page/UserList'
 import Home from '@/page/home'
 import Login from '@/page/login'
+import Daily from '@/page/daily'
 Vue.use(Router)
 
 export default new Router({
@@ -28,7 +29,11 @@ export default new Router({
           path:'/UserList',
           component:UserList,
           meta: ['数据管理', '用户列表'],
-        }]
+        },{
+          path:'/daily',
+          component:Daily,
+          meta: ['数据管理', '日报发布'],
+      }]
     },
   ]
 })

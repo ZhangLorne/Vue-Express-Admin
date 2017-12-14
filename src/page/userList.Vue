@@ -80,7 +80,7 @@
       addUser(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.api.saveUser({date:this.form.date,name:this.form.name,address:this.form.address})
+            this.api.saveUser(this.form)
             this.findUser();
             this.dialogFormVisible = false;
           } else {
