@@ -1,74 +1,113 @@
 <template>
-  <div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="日报标题">
-        <el-input ></el-input>
-      </el-form-item>
-      <el-form-item label="日报分类">
-        <el-select placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <quill-editor v-model="content"
-                  ref="myQuillEditor"
-                  :options="editorOption"
-                  @blur="onEditorBlur($event)"
-                  @focus="onEditorFocus($event)"
-                  @ready="onEditorReady($event)">
-    </quill-editor>
+  <div class="edit">
+    <el-container style="height: 45rem;">
+      <el-aside width="200px" >
+        <el-upload
+          class="avatar-uploader"
+          action="http://localhost:3000/daily/save"
+          list-type="picture"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :on-error="errorHandle"
+          :before-upload="beforeAvatarUpload">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <div style="width: 90%;text-align: center">封面图片</div>
+      </el-aside>
+      <el-container>
+        <el-form ref="form" style="width: 100%">
+          <el-input class="editTitle" v-model="title" placeholder="输入标题"></el-input>
+          <quill-editor v-model="body"
+                        ref="myQuillEditor"
+                        :options="editorOption">
+          </quill-editor>
+          <el-form-item  style="text-align: right;width: 100%;margin-top: 45px;margin-bottom: 0px;">
+            <el-button size="medium" type="primary"  @click="addNews('form')">发  布</el-button>
+          </el-form-item>
+        </el-form>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
 <script>
-    import { quillEditor } from 'vue-quill-editor'
-    export default {
-      data () {
-        return {
-          content: '<h2>I am Example</h2>',
-          editorOption: {
-            // something config
-          }
-        }
-      },
-      // if you need to manually control the data synchronization, parent component needs to explicitly emit an event instead of relying on implicit binding
-      // 如果需要手动控制数据同步，父组件需要显式地处理changed事件
-      methods: {
-        onEditorBlur(editor) {
-          console.log('editor blur!', editor)
+  import { quillEditor } from 'vue-quill-editor'
+  export default {
+    data () {
+      return {
+        body: '<h2>I am Example</h2>',
+        imageUrl:'',
+        editorOption: {
         },
-        onEditorFocus(editor) {
-          console.log('editor focus!', editor)
-        },
-        onEditorReady(editor) {
-          console.log('editor ready!', editor)
-        },
-        onEditorChange({ editor, html, text }) {
-          // console.log('editor change!', editor, html, text)
-          this.content = html
-        }
-      },
-      // if you need to get the current editor object, you can find the editor object like this, the $ref object is a ref attribute corresponding to the dom redefined
-      // 如果你需要得到当前的editor对象来做一些事情，你可以像下面这样定义一个方法属性来获取当前的editor对象，实际上这里的$refs对应的是当前组件内所有关联了ref属性的组件元素对象
-      computed: {
-        editor() {
-          return this.$refs.myTextEditor.quillEditor
-        }
-      },
-      components:{
-        quillEditor
-      },
-      mounted() {
-        // you can use current editor object to do something(editor methods)
-        console.log('this is my editor', this.editor)
-        // this.editor to do something...
+        title:''
       }
+    },
+    methods: {
+      addNews(form){
+        this.api.saveDaily({body:this.body,imgTit:this.imageUrl,title:this.title})
+      },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      errorHandle(err, file, fileList){
+        console.log(file.raw)
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+          this.$message.error('上传文件图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传文件大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      }
+    },
+    computed: {
+      editor() {
+        return this.$refs.myQuillEditor
+      }
+    },
+    components:{
+      quillEditor
+    },
+    mounted() {
+      console.log('this is my editor', this.editor)
     }
+  }
 </script>
 <style>
   .quill-editor{
     width: 100%;
-    height: 50rem;
+    height: 45rem;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .editTitle{
+    border-bottom: none;
+    border-color: #ccc;
   }
 </style>

@@ -55,5 +55,8 @@ export default {
   },
   login:function (params,success) {
     this.post(port+'/user/login',params,success)
+  },
+  saveDaily:function (params,success) {
+    this.post(port+'/daily/save',params,success)
   }
 }
