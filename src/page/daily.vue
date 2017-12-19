@@ -8,6 +8,7 @@
           list-type="picture"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
+          name="titleImg"
           :on-error="errorHandle"
           :before-upload="beforeAvatarUpload">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -38,6 +39,7 @@
       return {
         body: '<h2>I am Example</h2>',
         imageUrl:'',
+        filename:'',
         editorOption: {
         },
         title:''
@@ -45,9 +47,17 @@
     },
     methods: {
       addNews(form){
-        this.api.saveDaily({body:this.body,imgTit:this.imageUrl,title:this.title})
+        this.api.saveDaily({body:this.body,fliename:this.filename,title:this.title})
+        this.$message({
+          type: 'success',
+          message: '保存成功'
+        });
+        setTimeout(function () {
+          window.location.reload()
+        },200)
       },
       handleAvatarSuccess(res, file) {
+        this.filename=file.name;
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       errorHandle(err, file, fileList){
